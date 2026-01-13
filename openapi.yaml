@@ -1,0 +1,85 @@
+openapi: 3.1.0
+info:
+  title: Execution Risk Advisor API
+  version: 1.0.0
+  description: >
+    Minimal working OpenAPI schema for connecting a custom GPT to your own API using API key auth.
+servers:
+  - url: https://api.yourdomain.com  # <-- Replace with your actual API server domain (must be lowercase)
+
+paths:
+  /v1/execution-risk/recommendation:
+    post:
+      operationId: generateExecutionRiskRecommendation
+      summary: Generate a risk-optimized recommendation
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecutionRiskRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionRiskResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >
+        Use the format: Bearer YOUR_API_KEY
+
+  schemas:
+    ExecutionRiskRequest:
+      type: object
+      required:
+        - company_name
+        - issue
+        - constraints
+      properties:
+        company_name:
+          type: string
+        issue:
+          type: string
+        constraints:
+          type: object
+          required:
+            - timeframe_days
+            - budget_cap_usd
+          properties:
+            timeframe_days:
+              type: integer
+            budget_cap_usd:
+              type: number
+
+    ExecutionRiskResponse:
+      type: object
+      required:
+        - single_recommendation
+      properties:
+        single_recommendation:
+          type: string
+
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+
+          add openapi schema
