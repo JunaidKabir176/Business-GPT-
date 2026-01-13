@@ -1,22 +1,14 @@
-import express from 'express';
-const app = express();
-
-app.use(express.json());
-
-app.post('/v1/execution-risk/recommendation', (req, res) => {
-  const { company_name, issue, constraints } = req.body;
-
-  if (!company_name || !issue || !constraints) {
-    return res.status(400).json({ error: 'Missing required fields' });
+{
+  "name": "business-gpt-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
+}
 
-  res.json({
-    single_recommendation: `Recommendation: Resolve ${issue} for ${company_name} within ${constraints.timeframe_days} days.`
-  });
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
